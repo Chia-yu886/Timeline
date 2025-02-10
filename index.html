@@ -12,28 +12,17 @@
 </head>
 <body>
     <div class="container">
-        <div class="timeline" id="timeline">
-            <div class="timeline-item">
-                <img src="path/to/image.jpg" alt="Timeline Image" class="timeline-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openModal(this)">
-            </div>
-            <div class="empty-message">尚未有任何事件，請在面板新增事件</div>
-        </div>
-    </div>
-    
-    <!-- Bootstrap Modal -->
-    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                <div class="modal-body">
-                    <img id="modalImage" src="" alt="Timeline Image" class="timeline-image">
+        <div class="timeline" id="timeline"><div class="year-marker wow fadeIn" onclick="secretAccess()">2025</div>
+            <div class="timeline-container left wow fadeInLeft">
+                <div class="timeline-item">
+                    <div class="event-title">時間軸個人網頁</div>
+                    <div class="timeline-date">2025年2月10日</div>
+                    <div class="timeline-text">Hellow World !!!!!</div>
+                    <img src="./img/01.jpg" alt="" class="timeline-image">
                 </div>
             </div>
         </div>
     </div>
-
-
-    
     
     <script src="./js/jquery-3.7.1.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
