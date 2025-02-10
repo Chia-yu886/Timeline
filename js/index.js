@@ -102,6 +102,7 @@ function loadEventsList() {
         return;
     }
 
+    localStorage.setItem('timelineEvents', JSON.stringify(storedEvents));
     eventsList.innerHTML = storedEvents
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .map(event => `
