@@ -1,9 +1,6 @@
-
-window.location.href = "index.html";
-
 let events = [];
 let editingId = null;
-const isTimelinePage = window.location.pathname.includes('timeline.html');
+const isTimelinePage = window.location.pathname.includes('index.html');
 
 // 圖片預覽功能
 if (!isTimelinePage) {
