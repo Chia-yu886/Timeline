@@ -1,124 +1,7 @@
 let events = [];
 let editingId = null;
 const isTimelinePage = window.location.pathname.includes('index.html');
-let db;
-const request = indexedDB.open('eventsDatabase', 1);
 
-// 當資料庫創建或升級時
-request.onupgradeneeded = function(event) {
-    db = event.target.result;
-    
-    // 創建一個 object store（類似於資料表），並設定索引
-    if (!db.objectStoreNames.contains('events')) {
-        const store = db.createObjectStore('events', { keyPath: 'id' });
-        store.createIndex('date', 'date', { unique: false });
-    }
-};
-
-// 當資料庫開啟成功時
-request.onsuccess = function(event) {
-    db = event.target.result;
-    console.log('資料庫開啟成功');
-    loadEventsList();
-};
-
-// 當資料庫開啟失敗時
-request.onerror = function(event) {
-    console.error('資料庫開啟失敗', event.target.errorCode);
-};
-
-function addEventToDB(event) {
-    const transaction = db.transaction(['events'], 'readwrite');
-    const store = transaction.objectStore('events');
-    
-    const request = store.add(event); // 添加一個新的事件
-    
-    request.onsuccess = function() {
-        console.log('事件已成功儲存');
-    };
-    
-    request.onerror = function(event) {
-        console.error('儲存事件時出現錯誤', event.target.error);
-    };
-}
-
-function getEventsFromDB(callback) {
-    const transaction = db.transaction(['events'], 'readonly');
-    const store = transaction.objectStore('events');
-    
-    const request = store.getAll(); // 讀取所有事件
-    
-    request.onsuccess = function(event) {
-        const events = event.target.result;
-        callback(events);
-    };
-    
-    request.onerror = function(event) {
-        console.error('讀取事件時出現錯誤', event.target.error);
-    };
-}
-
-function updateEventInDB(event) {
-    const transaction = db.transaction(['events'], 'readwrite');
-    const store = transaction.objectStore('events');
-    
-    const request = store.put(event); // 更新已存在的事件
-    
-    request.onsuccess = function() {
-        console.log('事件已成功更新');
-    };
-    
-    request.onerror = function(event) {
-        console.error('更新事件時出現錯誤', event.target.error);
-    };
-}
-
-function deleteEventFromDB(id) {
-    const transaction = db.transaction(['events'], 'readwrite');
-    const store = transaction.objectStore('events');
-    
-    const request = store.delete(id); // 刪除事件
-    
-    request.onsuccess = function() {
-        console.log('事件已成功刪除');
-    };
-    
-    request.onerror = function(event) {
-        console.error('刪除事件時出現錯誤', event.target.error);
-    };
-}
-
-function loadEventsList() {
-    getEventsFromDB(function(events) {
-        const eventsList = document.getElementById('timeline');
-
-        if (events.length === 0) {
-            eventsList.innerHTML = '<p>尚無任何事件</p>';
-            return;
-        }
-
-        eventsList.innerHTML = events
-            .sort((a, b) => new Date(b.date) - new Date(a.date))
-            .map(event => `
-                <div class="event-item row ${event.id === editingId ? 'edit-mode' : ''}" id="event-${event.id}">
-                    ${event.image ? `<img src="${event.image}" class="event-image-thumb col-md-2 col-sm-2" alt="事件圖片">` : ''}
-                    <div class="event-content col-md-8 col-sm-12">
-                        <div class="event-title">${event.title}</div>
-                        <div class="event-date">${formatDate(event.date)}</div>
-                        <div class="event-text">${event.text}</div>
-                    </div>
-                    <div class="event-actions col-md-2 col-sm-12">
-                        <button onclick="editEvent(${event.id})" class="btn-action btn-edit">
-                            <i class="fas fa-edit"></i> 編輯
-                        </button>
-                        <button onclick="deleteEvent(${event.id})" class="btn-action btn-delete">
-                            <i class="fas fa-trash"></i> 刪除
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-    });
-}
 // 圖片預覽功能
 if (!isTimelinePage) {
     const imageInput = document.getElementById('imageInput');
@@ -143,36 +26,53 @@ if (!isTimelinePage) {
 function addEvent() {
     const dateInput = document.getElementById('eventDate');
     const textInput = document.getElementById('eventText');
-    const titleInput = document.getElementById('eventTitle');
+    const titleInput = document.getElementById('eventTitle'); // 新增標題欄位
     const imagePreview = document.getElementById('imagePreview');
     const submitBtn = document.getElementById('submitBtn');
     
-    if (dateInput.value && textInput.value && titleInput.value) {
+    if (dateInput.value && textInput.value && titleInput.value) {  // 確保標題欄位不為空
         const storedEvents = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
         
-        // 新增事件
-        const newEvent = {
-            date: dateInput.value,
-            text: textInput.value,
-            title: titleInput.value,
-            image: imagePreview.style.display !== 'none' ? imagePreview.src : null,
-            id: Date.now()
-        };
-        
-        storedEvents.push(newEvent);
+        if (editingId) {
+            // 更新現有事件
+            const index = storedEvents.findIndex(event => event.id === editingId);
+            if (index !== -1) {
+                storedEvents[index] = {
+                    ...storedEvents[index],
+                    date: dateInput.value,
+                    text: textInput.value,
+                    title: titleInput.value,  // 更新標題
+                    image: imagePreview.style.display !== 'none' ? imagePreview.src : null
+                };
+            }
+            editingId = null;
+            submitBtn.textContent = '新增事件';
+        } else {
+            // 新增事件
+            const newEvent = {
+                date: dateInput.value,
+                text: textInput.value,
+                title: titleInput.value,  // 新增標題
+                image: imagePreview.style.display !== 'none' ? imagePreview.src : null,
+                id: Date.now()
+            };
+            storedEvents.push(newEvent);
+        }
+
         storedEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
-        
-        // 儲存至 Local Storage
         localStorage.setItem('timelineEvents', JSON.stringify(storedEvents));
 
-        // 重新載入事件列表
+        // 重新載入事件列表和時間軸
         loadEventsList();
+        const timelineFrame = document.getElementById('timelineFrame');
+        if (timelineFrame) {
+            timelineFrame.contentWindow.location.reload();
+        }
 
         // 清空表單
         resetForm();
     }
 }
-
 
 
 function resetForm() {
@@ -192,7 +92,9 @@ function resetForm() {
 }
 
 function loadEventsList() {
-    const eventsList = document.getElementById('timeline');
+    if (isTimelinePage) return;
+
+    const eventsList = document.getElementById('eventsList');
     const storedEvents = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
 
     if (storedEvents.length === 0) {
@@ -221,7 +123,6 @@ function loadEventsList() {
             </div>
         `).join('');
 }
-
 
 function editEvent(id) {
     const events = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
