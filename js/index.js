@@ -26,53 +26,36 @@ if (!isTimelinePage) {
 function addEvent() {
     const dateInput = document.getElementById('eventDate');
     const textInput = document.getElementById('eventText');
-    const titleInput = document.getElementById('eventTitle'); // 新增標題欄位
+    const titleInput = document.getElementById('eventTitle');
     const imagePreview = document.getElementById('imagePreview');
     const submitBtn = document.getElementById('submitBtn');
     
-    if (dateInput.value && textInput.value && titleInput.value) {  // 確保標題欄位不為空
+    if (dateInput.value && textInput.value && titleInput.value) {
         const storedEvents = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
         
-        if (editingId) {
-            // 更新現有事件
-            const index = storedEvents.findIndex(event => event.id === editingId);
-            if (index !== -1) {
-                storedEvents[index] = {
-                    ...storedEvents[index],
-                    date: dateInput.value,
-                    text: textInput.value,
-                    title: titleInput.value,  // 更新標題
-                    image: imagePreview.style.display !== 'none' ? imagePreview.src : null
-                };
-            }
-            editingId = null;
-            submitBtn.textContent = '新增事件';
-        } else {
-            // 新增事件
-            const newEvent = {
-                date: dateInput.value,
-                text: textInput.value,
-                title: titleInput.value,  // 新增標題
-                image: imagePreview.style.display !== 'none' ? imagePreview.src : null,
-                id: Date.now()
-            };
-            storedEvents.push(newEvent);
-        }
-
+        // 新增事件
+        const newEvent = {
+            date: dateInput.value,
+            text: textInput.value,
+            title: titleInput.value,
+            image: imagePreview.style.display !== 'none' ? imagePreview.src : null,
+            id: Date.now()
+        };
+        
+        storedEvents.push(newEvent);
         storedEvents.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
+        // 儲存至 Local Storage
         localStorage.setItem('timelineEvents', JSON.stringify(storedEvents));
 
-        // 重新載入事件列表和時間軸
+        // 重新載入事件列表
         loadEventsList();
-        const timelineFrame = document.getElementById('timelineFrame');
-        if (timelineFrame) {
-            timelineFrame.contentWindow.location.reload();
-        }
 
         // 清空表單
         resetForm();
     }
 }
+
 
 
 function resetForm() {
@@ -92,9 +75,7 @@ function resetForm() {
 }
 
 function loadEventsList() {
-    if (isTimelinePage) return;
-
-    const eventsList = document.getElementById('eventsList');
+    const eventsList = document.getElementById('timeline');
     const storedEvents = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
 
     if (storedEvents.length === 0) {
@@ -102,7 +83,6 @@ function loadEventsList() {
         return;
     }
 
-    localStorage.setItem('timelineEvents', JSON.stringify(storedEvents));
     eventsList.innerHTML = storedEvents
         .sort((a, b) => new Date(b.date) - new Date(a.date))
         .map(event => `
@@ -124,6 +104,7 @@ function loadEventsList() {
             </div>
         `).join('');
 }
+
 
 function editEvent(id) {
     const events = JSON.parse(localStorage.getItem('timelineEvents') || '[]');
