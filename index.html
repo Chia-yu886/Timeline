@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>timeline_valerie</title>
+    <link rel="stylesheet" href="./css/all.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/fontawesome.min.css">
+    <link rel="stylesheet" href="./css/libs/animate.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="timeline" id="timeline">
+            <div class="timeline-item">
+                <img src="path/to/image.jpg" alt="Timeline Image" class="timeline-image" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="openModal(this)">
+            </div>
+            <div class="empty-message">尚未有任何事件，請在面板新增事件</div>
+        </div>
+    </div>
+    
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-body">
+                    <img id="modalImage" src="" alt="Timeline Image" class="timeline-image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+    
+    <script src="./js/jquery-3.7.1.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/WOW.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

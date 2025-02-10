@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dashboard_timeline</title>
+    <link rel="stylesheet" href="./css/all.css">
+    <link rel="stylesheet" href="./css/bootstrap.min.css">
+    <link rel="stylesheet" href="./css/fontawesome.min.css">
+    <link rel="stylesheet" href="./css/libs/animate.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-container">
+            <div class="input-section">
+                <h2>新增時間軸事件</h2>
+                <form>
+                    <div class="mb-3">
+                        <label for="eventDate" class="form-label">事件日期</label>
+                        <input type="date" class="form-control" id="eventDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventTitle" class="form-label">事件標題</label>
+                        <input type="text" class="form-control" id="eventTitle" placeholder="Title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="eventText" class="form-label">事件描述</label>
+                        <textarea class="form-control" id="eventText" placeholder="Content" required style="height: 150px;"></textarea>
+                    </div>
+                    <div class="mb-3 row g-0">
+                        <div class="col-md-3 col-sm-12 p-0">
+                            <label class="custom-file-upload fcc">
+                                <input type="file" id="imageInput" accept="image/*">
+                                <i class="fas fa-camera me-1"></i>
+                                <span>選擇圖片</span>
+                            </label>
+                        </div>
+                        <div class="col-md-9 col-sm-12 p-0">
+                            <img id="imagePreview" class="imagePreview">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" onclick="addEvent()" class="btn btn-primary w-100" id="submitBtn">新增事件</button>
+                    </div>
+                </form>
+            </div>
+    
+            <div class="events-list">
+                <h2>事件管理</h2>
+                <div id="eventsList"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- <iframe src="index.html" id="timelineFrame" style="width: 100%; border: none; min-height: 500px"></iframe> -->
+
+    <script src="./js/jquery-3.7.1.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+    <script src="./js/WOW.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>
