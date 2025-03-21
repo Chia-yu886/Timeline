@@ -1,0 +1,42 @@
+{
+    "events": [
+      {
+        "year": 2024,
+        "items": [
+          {
+            "title": "食品業APP介面",
+            "date": "2024年3月09日",
+            "text": "UI、UX設計，運用.Net Maui、Xamarin製作，商品顯示、購物車、訂單查詢、會員登入、購物車、訂單查詢、會員登入",
+            "image": "./img/GP_App.webp",
+            "position": "right"
+          },
+          {
+            "title": "接案平台前端介面",
+            "date": "2024年4月21日",
+            "text": "多頁面設計製作，接案到結案流程，會員系統介面，案件呈現，案件詳細資訊，專家介面",
+            "image": "./img/plus.png",
+            "position": "left"
+          },
+          {
+            "title": "智慧客服前端介面",
+            "date": "2024年8月9日",
+            "text": "對話介面，語系選擇，loading動畫",
+            "image": "./img/101.png",
+            "position": "right"
+          }
+        ]
+      },
+      {
+        "year": 2025,
+        "items": [
+          {
+            "title": "畫展導覽網頁",
+            "date": "2025年3月21日",
+            "text": "依照語系選擇變更內文，使用lightbox做畫作導覽，瀑布流排版",
+            "image": "./img/FSH.png",
+            "position": "left"
+          }
+        ]
+      }
+    ]
+  }
